@@ -1,0 +1,26 @@
+{
+  "name": "wec-front-pagination",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "npm run jest",
+    "jest": "jest"
+  },
+  "keywords": [],
+  "author": "11628820165@qq.com",
+  "license": "ISC",
+  "dependencies": {
+    "gap-front-view": "^2.7.6"
+  },
+  "devDependencies": {
+    "babel-core": "^6.26.3",
+    "babel-jest": "^23.2.0",
+    "babel-preset-env": "^1.7.0",
+    "jest": "^23.2.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/wecfin/wec-front-pagination"
+  }
+}
