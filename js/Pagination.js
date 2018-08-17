@@ -1,39 +1,64 @@
 import {View} from 'gap-front-view';
 
 export class Pagination extends View {
-    static get tag() {return 'div';}
-
-    init() {
-        this.ctn.addClass('pagination');
-
+    template() {
         let defaultOpts = {
             sizes: [10, 20, 30, 50, 100],
             layout: 'sizes, prev, next, jumper'
         };
 
-        this.opts = Object.assign({}, defaultOpts, this.props);
+        const opts = Object.assign({}, defaultOpts, this.props);
         this.total = 0;
-        this.pageSize = this.opts.sizes[0];
+        this.pageSize = opts.sizes[0];
         this.totalPage = 1;
         this.current = 1;
+
+        const layout = (opts.layout).toLocaleLowerCase();
+        const sizes = layout.indexOf('sizes') != -1 ? opts.sizes : null;
+        const prev = layout.indexOf('prev') != -1 ? true : false;
+        const next = layout.indexOf('next') != -1 ? true : false;
+
+        return this.html`
+        <div class="pagination">
+            ${this.getPageSizeTpl(sizes)}
+            ${this.getBtnPrevTpl(prev)}
+            <ul class="pager flex">pager</ul>
+            ${this.getBtnNextTpl(next)}
+            ${this.getJumperTpl(layout.indexOf('jumper') !== -1)}
+        </div>
+        `;
     }
 
-    render() {
-        const opts = this.opts;
-        const layout = (opts.layout).toLocaleLowerCase();
-        this.ctn.html`
-            ${(layout.indexOf('sizes') != -1) ? `<select name="pageSize">${opts.sizes.map(item =>  `<option value="${item}">${item}/page</option>`).join('')}</select>` : ''}
-            ${(layout.indexOf('prev') != -1) ? `<button class="btn-prev">&lt;</button>` : ''}
-            <ul class="pager flex">pager</ul>
-            ${(layout.indexOf('next') != -1) ? `<button class="btn-next">&gt;</button>` : ''}
-            ${(layout.indexOf('jumper') != -1) ?
-                `<div class="jumper-wrapper">
-                    <div class="flex flex-center align-center">
-                        <input class="go-input" type="number" min="1" autocomplete="off">
-                        <button class="go-to">go</button>
-                    </div>
-                </div>` : ''}
+    getPageSizeTpl(sizes) {
+        if (!sizes) {
+            return '';
+        }
+        return  `
+            <select name="pageSize">${sizes.map(item =>  `<option value="${item}">${item}/page</option>`).join('')}</select>
         `;
+    }
+
+    getBtnPrevTpl(prev) {
+        if (prev) {
+            return `<button class="btn-prev">&lt;</button>`;
+        }
+    }
+
+    getBtnNextTpl(next) {
+        if (next) {
+            return `<button class="btn-next">&gt;</button>`;
+        }
+    }
+
+    getJumperTpl(jumper) {
+        if (jumper) {
+            return `<div class="jumper-wrapper">
+                <div class="flex flex-center align-center">
+                    <input class="go-input" type="number" min="1" autocomplete="off">
+                    <button class="go-to">go</button>
+                </div>
+            </div>`;
+        }
     }
 
     startup() {
